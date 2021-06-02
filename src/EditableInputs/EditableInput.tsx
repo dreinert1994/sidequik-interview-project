@@ -6,7 +6,9 @@ type EditableProps = {
   type: "input" | "textarea";
   placeholder?: string;
   childRef: React.RefObject<HTMLInputElement | HTMLTextAreaElement>
-} 
+  additionalClasses?: string[];
+  textColor?: string
+}
 
 const Editable: React.FC<EditableProps> = ({
   text,
@@ -14,6 +16,8 @@ const Editable: React.FC<EditableProps> = ({
   placeholder,
   children,
   childRef,
+  additionalClasses,
+  textColor,
   ...props
 }) => {
   const [isEditing, setEditing] = useState(false);
@@ -37,6 +41,12 @@ const Editable: React.FC<EditableProps> = ({
     }
   };
 
+  let cssClasses = `rounded py-2 px-3 text-gray-700 leading-tight whitespace-pre-wrap hover:shadow-outline editable-${type}`;
+  if (additionalClasses) {
+    const classString = additionalClasses.join(" ");
+    cssClasses += ` ${classString}`;
+  }
+
   return (
     <section {...props}>
       {isEditing ? (
@@ -48,11 +58,11 @@ const Editable: React.FC<EditableProps> = ({
         </div>
       ) : (
         <div
-          className={`rounded py-2 px-3 text-gray-700 leading-tight whitespace-pre-wrap hover:shadow-outline editable-${type}`}
+          className={cssClasses}
           onClick={() => setEditing(true)}
         >
             <span
-              className={`${text ? "text-black" : "text-gray-500"}`}
+              className={textColor ? textColor : `${text ? "text-black" : "text-gray-500"}`}
             >
             {text || placeholder || ""}
           </span>

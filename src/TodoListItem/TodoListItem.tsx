@@ -1,57 +1,72 @@
 import React, { useRef } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { TodoListItemData } from '../api/data';
-import EditableInput from '../EditableInputs/EditableInput';
-import './TodoListItem.css';
+import EditableTextArea from '../EditableInputs/EditableTextArea';
+import EditableTextInput from '../EditableInputs/EditableTextInput';
+import RemoveTodoListItem from './RemoveTodoListItem';
 
 type TodoListItemProps = {
   item: TodoListItemData;
   index: number;
   updateItem: (field: string, value: string) => void;
+  removeItem: () => void;
 }
 
-const TodoListItem: React.FC<TodoListItemProps> = ({ item, index, updateItem }) => {
+const statusColorMap = (status: string) => {
+  const lower = status.toLocaleLowerCase();
+  switch (lower) {
+    case "":
+      return "bg-white";
+    case "to-do":
+      return "bg-red-500";
+    case "in progress":
+      return "bg-yellow-500";
+    case "done":
+    case "completed":
+      return "bg-green-500"
+    default:
+      return "bg-blue-500";
+  }
+}
+
+const TodoListItem: React.FC<TodoListItemProps> = ({ item, index, updateItem, removeItem }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const statusRef = useRef<HTMLInputElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   return <Draggable draggableId={item.id} index={index}>
     {provided => <div
-      className="todo-list-item"
+      className="p-2.5 rounded bg-white shadow-sm"
       {...provided.draggableProps}
-      {...provided.dragHandleProps}
       ref={provided.innerRef}
     >
-        <EditableInput
-          text={item.title}
-          placeholder="Write a task name"
-          childRef={inputRef}
-          type="input"
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            name="title"
-            placeholder="Thing to do"
-            value={item.title}
-            onChange={e => updateItem('title', e.target.value)}
-          />
-        </EditableInput>
-        <EditableInput
-          text={item.notes}
-          placeholder="Notes..."
-          childRef={textAreaRef}
-          type="textarea"
-        >
-          <textarea
-            ref={textAreaRef}
-            name="notes"
-            //className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-300"
-            placeholder="Description for the task"
-            rows={5}
-            value={item.notes}
-            onChange={e => updateItem('notes', e.target.value)}
-          />
-        </EditableInput>
-      </div>
+      <label htmlFor="title" {...provided.dragHandleProps}>Task Title:</label>
+      <EditableTextInput
+        value={item.title}
+        placeholder="Enter a task name"
+        inputRef={inputRef}
+        name="title"
+        onChange={(value) => updateItem('title', value)}
+      />
+      <label htmlFor="status">Task Status:</label>
+      <EditableTextInput
+        value={item.status}
+        placeholder="Enter a task status"
+        inputRef={statusRef}
+        name="status"
+        onChange={(value) => updateItem('status', value)}
+        additionalClasses={[statusColorMap(item.status)]}
+        textColor='white'
+      />
+      <label htmlFor="notes">Task Notes:</label>
+      <EditableTextArea
+        placeholder="Enter task notes"
+        onChange={(value) => updateItem('notes', value)}
+        name="notes"
+        value={item.notes}
+        textAreaRef={textAreaRef}
+      />
+      <RemoveTodoListItem removeItem={removeItem} />
+    </div>
     }
   </Draggable>
 }

@@ -6,9 +6,9 @@ type AddTodoListItemProps = {
 }
 
 const AddTodoListItem: React.FC<AddTodoListItemProps> = ({ addItem }) => {
-  return <div onClick={() => addItem()} className="add-todo-list-item">
-    + Add
-  </div>
+  return <button onClick={() => addItem()} className="add-button pt-4 pb-2">
+    Add Task
+  </button>
 }
 
 export default AddTodoListItem;

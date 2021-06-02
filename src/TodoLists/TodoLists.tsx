@@ -3,10 +3,11 @@ import { data, TodoListItemData } from '../api/data';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import TodoList from '../TodoList/TodoList';
 import './TodoLists.css';
+import TodoListsHeader from './TodoListsHeader';
 
 const TodoLists: React.FC = () => {
   const [todoLists, setTodoLists] = useState(data);
-  const [nextListId, setNextListId] = useState(data.length);
+  const [nextListId, setNextListId] = useState(data.length+1);
   const [nextItemId, setNextItemId] = useState(data.map(l => l.items.length).reduce((acc, val) => acc+val)+1);
 
   const updateTodoListItem = (listId: string, updatedItem: TodoListItemData) => {
@@ -52,7 +53,8 @@ const TodoLists: React.FC = () => {
     list.items.push({
       id: `item-${nextItemId}`,
       title: "",
-      notes: ""
+      notes: "",
+      status: "To-Do"
     });
     setNextItemId(nextItemId => nextItemId+1);
     setTodoLists([...todoLists]);
@@ -99,9 +101,10 @@ const TodoLists: React.FC = () => {
   }
 
   return <DragDropContext onDragEnd={onDragEnd}>
+    <TodoListsHeader addTodoList={addTodoList}/>
     <Droppable droppableId="lists" direction="horizontal" type="list">
       {provided => <div
-        className="todo-lists"
+        className="grid overflow-auto grid-flow-col gap-2.5 todo-lists"
         ref={provided.innerRef}
         {...provided.droppableProps}
       >
@@ -111,7 +114,6 @@ const TodoLists: React.FC = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.draggableProps}
-                {...provided.dragHandleProps}
               >
                 <TodoList
                   list={list}

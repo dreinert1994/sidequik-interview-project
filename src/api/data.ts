@@ -1,5 +1,6 @@
 export interface TodoListItemData {
   id: string;
+  status: string;
   title: string;
   notes: string;
 }
@@ -18,7 +19,8 @@ export const data: TodoListData[] = [
       {
         id: 'item-1',
         title: "Grocery Shopping",
-        notes: "Don't forget to pick up ingredients for the cake"
+        notes: "Don't forget to pick up ingredients for the cake",
+        status: "In Progress"
       }
     ]
   },
@@ -29,12 +31,14 @@ export const data: TodoListData[] = [
       {
         id: 'item-2',
         title: "Take out the garbage",
-        notes: "Garbage goes out friday this week"
+        notes: "Garbage goes out friday this week",
+        status: "To-Do"
       },
       {
         id: 'item-3',
         title: "Empty the dishwasher",
-        notes: ""
+        notes: "",
+        status: "Completed"
       }
     ]
   }

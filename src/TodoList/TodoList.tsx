@@ -17,7 +17,15 @@ type TodoListProps = {
   updateTodoListName: (listId: string, name: string) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ list, dragHandleProps, addTodoListItem, updateTodoListItem, updateTodoListName }) => {
+const TodoList: React.FC<TodoListProps> = ({
+  list,
+  dragHandleProps,
+  addTodoListItem,
+  deleteTodoList,
+  updateTodoListItem,
+  updateTodoListName,
+  deleteTodoListItem
+}) => {
 
   const addItem = useCallback(() => addTodoListItem(list.id), [list, addTodoListItem]);
 
@@ -32,20 +40,22 @@ const TodoList: React.FC<TodoListProps> = ({ list, dragHandleProps, addTodoListI
 
   return <Droppable droppableId={list.id} type="item">
     {provided => <div
-      className="todo-list"
+      className="todo-list grid auto-rows-max gap-2.5 p-2.5 rounded"
       ref={provided.innerRef}
       {...provided.droppableProps}
     >
       <TodoListTitle
         title={list.name}
         updateListTitle={updateListTitle}
-        {...dragHandleProps}
+        deleteTodoList={() => deleteTodoList(list.id)}
+        dragHandleProps={dragHandleProps}
       />
       {list.items.map((item, index) => <TodoListItem
         key={item.id}
         index={index}
         item={item}
         updateItem={updateListItem(list.id, item)}
+        removeItem={() => deleteTodoListItem(list.id, item.id)}
       />)}
       {provided.placeholder}
       <AddTodoListItem addItem={addItem}/>
