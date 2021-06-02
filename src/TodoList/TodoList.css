@@ -1,0 +1,13 @@
+.todo-list {
+  background-color: rgb(235, 236, 240);
+  border-radius: 3px;
+  display: grid;
+  grid-auto-rows: max-content;
+  grid-gap: 10px;
+  height: max-content;
+  padding: 10px;
+}
+
+.list-title {
+  font-weight: bold;
+}

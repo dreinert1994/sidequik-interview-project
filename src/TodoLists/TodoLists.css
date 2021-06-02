@@ -1,0 +1,7 @@
+.todo-lists {
+  display: grid;
+  grid-auto-columns: 272px;
+  grid-auto-flow: column;
+  grid-gap: 8px;
+  overflow: auto;
+}
