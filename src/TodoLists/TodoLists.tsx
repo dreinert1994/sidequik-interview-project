@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { data, TodoListItemData } from '../api/data';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import TodoList from '../TodoList/TodoList';
@@ -7,6 +7,7 @@ import TodoListsHeader from './TodoListsHeader';
 
 const TodoLists: React.FC = () => {
   const [todoLists, setTodoLists] = useState(data);
+  const [isHorizontal, setIsHorizontal] = useState(false);
   const [nextListId, setNextListId] = useState(data.length+1);
   const [nextItemId, setNextItemId] = useState(data.map(l => l.items.length).reduce((acc, val) => acc+val)+1);
 
@@ -100,11 +101,13 @@ const TodoLists: React.FC = () => {
     setTodoLists([...todoLists]);
   }
 
+  const flipLists = useCallback(() => setIsHorizontal(h => !h), [setIsHorizontal])
+
   return <DragDropContext onDragEnd={onDragEnd}>
-    <TodoListsHeader addTodoList={addTodoList}/>
+    <TodoListsHeader addTodoList={addTodoList} flipLists={flipLists} isHorizontal={isHorizontal}/>
     <Droppable droppableId="lists" direction="horizontal" type="list">
       {provided => <div
-        className="grid overflow-auto grid-flow-col gap-2.5 todo-lists"
+        className={`grid overflow-auto grid-flow-${isHorizontal ? "row" : "col"} ${isHorizontal ? "grid-cols-1" : ""} gap-2.5 todo-lists`}
         ref={provided.innerRef}
         {...provided.droppableProps}
       >
@@ -117,6 +120,7 @@ const TodoLists: React.FC = () => {
               >
                 <TodoList
                   list={list}
+                  isHorizontal={isHorizontal}
                   dragHandleProps={provided.dragHandleProps}
                   addTodoListItem={addTodoListItem}
                   updateTodoListItem={updateTodoListItem}

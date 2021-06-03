@@ -8,6 +8,7 @@ import { DraggableProvidedDragHandleProps, Droppable } from 'react-beautiful-dnd
 
 type TodoListProps = {
   list: TodoListData;
+  isHorizontal: boolean;
   dragHandleProps?: DraggableProvidedDragHandleProps
   updateTodoListItem: (listId: string, updatedItem: TodoListItemData) => void;
   deleteTodoListItem: (listId: string, listItemId: string) => void;
@@ -19,6 +20,7 @@ type TodoListProps = {
 
 const TodoList: React.FC<TodoListProps> = ({
   list,
+  isHorizontal,
   dragHandleProps,
   addTodoListItem,
   deleteTodoList,
@@ -40,7 +42,8 @@ const TodoList: React.FC<TodoListProps> = ({
 
   return <Droppable droppableId={list.id} type="item">
     {provided => <div
-      className="todo-list grid auto-rows-max gap-2.5 p-2.5 rounded"
+      className={`todo-list grid ${isHorizontal ? "grid-flow-col" : ""} auto-${isHorizontal ? "cols" : "rows"}-max gap-2.5 p-2.5 rounded`}
+      style={isHorizontal ? { width: "max-content" } : { height: "max-content"}}
       ref={provided.innerRef}
       {...provided.droppableProps}
     >

@@ -1,5 +1,6 @@
 .todo-lists {
   grid-auto-columns: 272px;
+  grid-auto-rows: "max-contant auto";
 }
 
 .button {
@@ -7,6 +8,7 @@
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   padding: 5px;
+  margin: 2px;
 }
 
 .button:hover {

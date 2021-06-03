@@ -1,6 +1,8 @@
 .todo-list {
   background-color: rgb(235, 236, 240);
   height: max-content;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .delete-button {
